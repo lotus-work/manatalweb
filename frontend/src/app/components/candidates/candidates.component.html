@@ -1,0 +1,87 @@
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Candidats List</li>
+        </ol>
+      </nav>
+  
+    <div *ngIf="loading" class="text-center">
+      <p>Loading candidates...</p>
+    </div>
+  
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+  
+    <table *ngIf="!loading && !error" class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Full Name</th>
+          <th>Gender</th>
+          <th>Phone Number</th>
+          <th>Email Address</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let candidate of candidates; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ candidate.full_name }}</td>
+          <td>{{ candidate.gender }}</td>
+          <td>{{ candidate.phone_number }}</td>
+          <td>{{ candidate.email }}</td>
+          <td>
+            <div class="d-inline-flex gap-2">
+              <!-- View More Button -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectedCandidate = candidate">
+                Candidate Details
+              </button>
+  
+              <!-- View Resume Button -->
+              <button class="btn btn-secondary" 
+                      (click)="viewResume(candidate.resume)">
+                View Resume
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ selectedCandidate?.full_name }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Full Name:</strong> {{ selectedCandidate?.full_name }}</p>
+            <p><strong>Email:</strong> {{ selectedCandidate?.email }}</p>
+            <p><strong>Phone:</strong> {{ selectedCandidate?.phone_number }}</p>
+            <p><strong>Gender:</strong> {{ selectedCandidate?.gender }}</p>
+            <p><strong>Address:</strong> {{ selectedCandidate?.address }}</p>
+            <p><strong>Latest Degree:</strong> {{ selectedCandidate?.latest_degree }}</p>
+            <p><strong>Latest University:</strong> {{ selectedCandidate?.latest_university }}</p>
+            <p><strong>Current Company:</strong> {{ selectedCandidate?.current_company }}</p>
+            <p><strong>Current Position:</strong> {{ selectedCandidate?.current_position }}</p>
+            <p><strong>Description:</strong> {{ selectedCandidate?.description }}</p>
+  
+            <div *ngIf="selectedCandidate?.custom_fields?.topskills?.length > 0">
+              <strong>Top Skills:</strong>
+              <div class="mt-2">
+                <span *ngFor="let skill of selectedCandidate.custom_fields.topskills" class="badge bg-primary me-1">{{ skill }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
